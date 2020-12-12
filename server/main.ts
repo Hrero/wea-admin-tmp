@@ -19,11 +19,11 @@ async function bootstrap() {
     app.set('etag', false);
     app.enableCors();
     await app.init();
-    http.createServer(server).listen(4106);
+    http.createServer(server).listen(8002);
     if (process.env.NODE_ENV === 'production') {
         https.createServer({
-            key: fs.readFileSync(path.resolve('./static/ssl/zugeliang.com.key')),
-            cert: fs.readFileSync(path.resolve('./static/ssl/zugeliang.com.crt')),
+            // key: fs.readFileSync(path.resolve('./static/ssl/zugeliang.com.key')),
+            // cert: fs.readFileSync(path.resolve('./static/ssl/zugeliang.com.crt')),
         }, server).listen(8002);
     }
 }
