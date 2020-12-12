@@ -1,0 +1,34 @@
+@import './main_config';
+
+.sys-table-content{
+	background: @white;
+	padding: @lg;
+	border-radius: 2px;
+	box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+	overflow: hidden;
+}
+
+.ant-table-bordered{
+	.ant-table-thead>tr>th{
+		background: @conBackground;
+	}
+    .ant-table-tbody>tr>td,.ant-table-thead>tr>th{
+        border-right-style: dashed!important;
+    }
+    .ant-table-tbody>tr>td:last-child,.ant-table-thead>tr>th:last-child{
+        border-right-style: solid!important;
+    }
+}
+.ant-tabs.ant-tabs-card .ant-tabs-card-bar .ant-tabs-tab{
+    transition: none!important;
+}
+.table-content{
+    .table-info{
+        th{
+            white-space: nowrap;
+            span{
+                white-space: nowrap;
+            }
+        }
+    }
+}

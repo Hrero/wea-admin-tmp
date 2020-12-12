@@ -1,0 +1,31 @@
+<ul nz-menu nzMode="inline" style="width: 220px;">
+    <app-logo-icon></app-logo-icon>
+    <ng-container  *ngFor="let item of menuList">
+        <li *ngIf="item.child && item.child.length"
+            nz-submenu
+            [hidden]= "item.hidden"
+            [(nzOpen)]="item.isOpen"
+            [nzTitle]="item.name"
+            [nzIcon]="item.icon">
+            <ul>
+                <li nz-menu-item
+                    nzMatchRouter
+                    [hidden]= "child.hidden"
+                    *ngFor="let child of item.child">
+                    <a routerLink="">
+                        <span>{{child.name}}</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li nz-menu-item
+            nzMatchRouter
+            [hidden]= "item.hidden"
+            *ngIf="!item.child || !item.child.length">
+            <a routerLink="">
+                <i nz-icon [nzType]="item.icon"></i>
+                <span>{{item.name}}</span>
+            </a>
+        </li>
+    </ng-container>
+</ul>

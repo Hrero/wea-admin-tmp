@@ -1,0 +1,138 @@
+<form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm(validateForm.value, apiOnly)">
+    <div *ngFor="let item of formsCtrl;"  [style.display]="!item.hidden ? 'block' : 'none'">
+        <ng-container [ngSwitch]="item.type">
+            <nz-form-item *ngSwitchCase="'show'">
+                <nz-form-label [nzSm]="6" [nzXs]="24" [nzFor]="item.key" [nzRequired]="item.required"></nz-form-label>
+                <nz-form-control [nzSm]="18" [nzXs]="24" nzHasFeedback>
+                    <input nz-input [(ngModel)]="validateForm.value[item.key]" [ngModelOptions]="{standalone: true}" [disabled]="true"/>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item *ngSwitchCase="'area'">
+                <nz-form-label [nzSm]="6" [nzXs]="24" [nzFor]="item.key"
+                               [nzRequired]="item.required"></nz-form-label>
+                <nz-form-control [nzSm]="18" [nzXs]="24" nzHasFeedback>
+                    <textarea [rows]="item.areaRow || '4'" nz-input [formControlName]="item.key" [placeholder]="item.placeholder || ('请输入' + item.label)"></textarea>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item *ngSwitchCase="'radio'">
+                <nz-form-label [nzSm]="6" [nzXs]="24" [nzFor]="item.key"
+                               [nzRequired]="item.required"></nz-form-label>
+                <nz-form-control [nzSm]="18" [nzXs]="24" nzHasFeedback>
+                    <nz-radio-group [formControlName]="item.key">
+                        <label *ngFor="let item of item.optionList" nz-radio [nzValue]="item.value"></label>
+                    </nz-radio-group>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item *ngSwitchCase="'text'">
+                <nz-form-label [nzSm]="6" [nzXs]="24" [nzFor]="item.key"
+                               [nzRequired]="item.required"></nz-form-label>
+                <nz-form-control [nzSm]="18" [nzXs]="24" nzHasFeedback>
+                    <input nz-input [formControlName]="item.key" [placeholder]="item.placeholder || ('请输入' + item.label) "/>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item *ngSwitchCase="'number'">
+                <nz-form-label [nzSm]="6" [nzXs]="24" [nzFor]="item.key"
+                               [nzRequired]="item.required"></nz-form-label>
+                <nz-form-control [nzSm]="18" [nzXs]="24" nzHasFeedback>
+                    <nz-input-number [formControlName]="item.key"
+                                     [nzMin]="item.min || 0"
+                                     [nzMax]="item.max || 9999999"
+                                     [nzStep]="item.step || 1"></nz-input-number>
+                    <span class="line-md margin-left-sm" *ngIf="item.tips"></span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item *ngSwitchCase="'date'">
+                <nz-form-label [nzSm]="6" [nzXs]="24" [nzFor]="item.key"
+                               [nzRequired]="item.required"></nz-form-label>
+                <nz-form-control [nzSm]="18" [nzXs]="24" nzHasFeedback>
+                    <nz-date-picker [formControlName]="item.key"
+                                    [nzFormat]="item.format === 'long' ? 'yyyy-MM-dd hh:mm:ss' : item.format"></nz-date-picker>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item *ngSwitchCase="'select'">
+                <nz-form-label [nzSm]="6" [nzXs]="24" [nzFor]="item.key"
+                               [nzRequired]="item.required"></nz-form-label>
+                <nz-form-control [nzSm]="18" [nzXs]="24" nzHasFeedback>
+                    <nz-select [formControlName]="item.key"
+                               (nzOpenChange)="getSelectData($event, item)"
+                               (nzOnSearch)="getSearchData($event, item)"
+                               [nzPlaceHolder]="item.placeholder || '请选择'"
+                               [nzLoading]="item.isLoading"
+                               [nzMode]="item.nzMode || 'default'"
+                               [nzServerSearch]="item.search"
+                               nzShowSearch
+                               nzAllowClear>
+                        <nz-option *ngFor="let o of item.optionList" [nzValue]="o.value" [nzLabel]="o.name"></nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item *ngSwitchCase="'cascader'">
+                <nz-form-label [nzSm]="6" [nzXs]="24" [nzFor]="item.key"
+                               [nzRequired]="item.required"></nz-form-label>
+                <nz-form-control [nzSm]="18" [nzXs]="24" nzHasFeedback>
+                    <nz-cascader
+                        nzAllowClear
+                        [formControlName]="item.key"
+                        [nzPlaceHolder]="item.placeholder"
+                        [nzOptions]="item.optionList"
+                        ></nz-cascader>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item *ngSwitchCase="'file'">
+                <nz-form-label [nzSm]="6" [nzXs]="24" [nzFor]="item.key"
+                               [nzRequired]="item.required"></nz-form-label>
+                <nz-form-control [nzSm]="14" [nzXs]="24">
+                    <ng-container *ngIf="item.dataType === 'sign'">
+                            <input nz-input [formControlName]="item.key"/>
+                    </ng-container>
+                    <ng-container  *ngIf="item.dataType !== 'sign'">
+                        <div nz-row [nzGutter]="8" *ngFor="let file of fileList; let j = index;">
+                            <div nz-col nzSpan="21" class="line-md">
+                                <a (click)="viewImg(file)" target="_blank" *ngIf="file">图片文件</a>
+                                <span *ngIf="!file">请上传图片或文件</span>
+                            </div>
+                            <div nz-col [nzSpan]="3" class="opr-icons">
+                                <a class="color-red" (click)="delThisFile(j, item.key, item.dataType)">
+                                    <i nz-icon nzType="minus-square" nzTheme="outline"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </ng-container>
+                </nz-form-control>
+                <nz-form-control [nzSm]="4" [nzXs]="24">
+                    <nz-upload [nzAction]="uploadUrl"
+                               class="margin-left-sm"
+                               (nzChange)="fileUp($event, item.key, item.dataType)"
+                               [nzShowUploadList]="false">
+                        <button nz-button nzType="primary" (click)="$event.preventDefault();">
+                            <i nz-icon nzType="upload"></i>
+                        </button>
+                    </nz-upload>
+                </nz-form-control>
+            </nz-form-item>
+        </ng-container>
+    </div>
+    <div class="text-center color-red margin-bottom-lg" *ngIf="apiOnly && apiOnly.warning">
+        <span [innerHTML]="apiOnly.warning"></span>
+    </div>
+    <div class="text-center color-red margin-bottom-lg" *ngIf="warning">
+        <span></span>
+    </div>
+    <div class="form-button">
+        <ng-container *ngIf="submitBtn; else Btn_only">
+            <button class="margin-right-lg"
+                    *ngFor="let item of submitBtn"
+                    nz-button
+                    [nzType]="item.btnType || 'primary'"
+                    [disabled]="!validateForm.valid || isDisabled"
+                    (click)="submitForApi($event, validateForm.value, item)"></button>
+        </ng-container>
+        <ng-template #Btn_only>
+            <button class="margin-right-lg"
+                    nz-button
+                    [nzType]="'primary'"
+                    [disabled]="!validateForm.valid || isDisabled">确定</button>
+        </ng-template>
+        <button nz-button nzType="default" (click)="cancel($event)">取消</button>
+    </div>
+</form>

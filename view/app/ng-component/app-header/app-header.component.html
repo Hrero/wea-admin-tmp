@@ -1,0 +1,35 @@
+<div class="app-header-info">
+    <div class="login-menu-icon" *ngIf="isMobile" (click)="changeShow()">
+        <i nz-icon [nzType]="menuShow ? 'menu-unfold' : 'menu-fold'" nzTheme="outline"></i>
+    </div>
+    <div class="login-menu" *ngIf="isMobile">
+        <div class="login-menu-info" *ngIf="menuShow">
+            <div class="menu-over" (click)="changeShow()"></div>
+            <ul nz-menu [nzMode]="isMobile ? 'inline' : 'horizontal'">
+                <ng-container *ngFor="let item of menuList;">
+                    <li nz-submenu
+                        [nzOpen]="true"
+                        [nzTitle]="item.name"
+                        [nzIcon]="item.icon">
+                        <ul class="max-height">
+                            <ng-container *ngFor="let child of item.child;">
+                                <li nz-menu-item nzMatchRouter>
+                                    <a href="javaScript:void(0)" (click)="toUrl(child.url)">
+                                        <span></span>
+                                    </a>
+                                </li>
+                            </ng-container>
+                        </ul>
+                    </li>
+                </ng-container>
+            </ul>
+        </div>
+    </div>
+    <div class="login-info">
+        <span>{{username}}</span>
+        | boke管理系统
+        <a href="javascript:void(0)" (click)="logout()">
+            <i nz-icon nzType="logout"></i>
+        </a>
+    </div>
+</div>

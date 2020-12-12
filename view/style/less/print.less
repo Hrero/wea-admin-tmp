@@ -1,0 +1,22 @@
+@media print {
+    div{
+        visibility: hidden;
+    }
+    .modal-print{
+        visibility: visible;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        div {
+            visibility: visible;
+        }
+        table{
+            width: 100%;
+            border-collapse: collapse; border-spacing: 0;
+            td{
+                padding: 5px 10px;
+            }
+        }
+    }
+}

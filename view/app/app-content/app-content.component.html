@@ -1,0 +1,13 @@
+<div class="app-page">
+    <div class="app-menu">
+        <app-menu [menuList]="menuList"></app-menu>
+    </div>
+    <div class="app-body" #divTarget>
+        <div class="app-header">
+            <app-header [sysName]="'BOKE'" [menuList]="menuList"></app-header>
+        </div>
+        <router-outlet (deactivate)="rollTop()"></router-outlet>
+        <nz-back-top [nzTarget]="divTarget"></nz-back-top>
+    </div>
+</div>
+

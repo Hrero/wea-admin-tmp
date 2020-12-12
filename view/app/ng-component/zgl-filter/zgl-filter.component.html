@@ -1,0 +1,128 @@
+<div class="zgl-filter-component">
+    <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+        <div class="form-row" nz-row>
+            <div class="form-left" nz-col [nzSpan]="20">
+                <div nz-row>
+                    <ng-container *ngFor="let item of showFilters; let i = index">
+                        <ng-container [ngSwitch]="item.type">
+                            <div nz-col [nzSpan]="isMobile ? 24 : 4" *ngSwitchCase="'select'">
+                                <div class="filter-item" nz-row>
+                                    <div class="item-label" nz-col [nzSpan]="0"></div>
+                                    <div nz-col [nzSpan]="24">
+                                        <nz-select [formControlName]="item.key"
+                                            (nzOpenChange)="getSelectData($event, item)"
+                                            (nzOnSearch)="getSearchData($event, item)"
+                                            [nzPlaceHolder]="item.placeholder" 
+                                            [nzLoading]="item.isLoading"
+                                            [nzMode]="item.nzMode || 'default'" 
+                                            nzSize="" 
+                                            nzShowSearch 
+                                            nzAllowClear
+                                            (ngModelChange)="selectChange($event, item)"
+                                            style="border-radius: 0;">
+                                            <nz-option *ngFor="let o of item.optionList" [nzValue]="o.value"
+                                                [nzLabel]="o.name"></nz-option>
+                                        </nz-select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div nz-col [nzSpan]="isMobile ? 24 : 6" *ngSwitchCase="'range'">
+                                <div class="filter-item" nz-row>
+                                    <div class="item-label" nz-col [nzSpan]="8"></div>
+                                    <div nz-col [nzSpan]="7">
+                                        <input nz-input nzSize="small" [formControlName]="item.key"
+                                            [placeholder]="item.placeholder || ('请输入' + item.label)"/>
+                                    </div>
+                                    <div nz-col [nzSpan]="2" class="text-center">~</div>
+                                    <div nz-col [nzSpan]="7">
+                                        <input nz-input nzSize="small" [formControlName]="item.keys"
+                                            [placeholder]="item.placeholders || ('请输入' + item.label)" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div nz-col [nzSpan]="isMobile ? 24 : 6" *ngSwitchCase="'cascader'">
+                                <div class="filter-item" nz-row>
+                                    <div class="item-label" nz-col [nzSpan]="0"></div>
+                                    <div nz-col [nzSpan]="24">
+                                        <nz-cascader [formControlName]="item.key"
+                                                     [nzPlaceHolder]="item.placeholder"
+                                                     [nzOptions]="item.optionList"
+                                            (nzVisibleChange)="getSelectData($event, item)" nzSize="" nzAllowClear
+                                            (ngModelChange)="onChanges($event)"></nz-cascader>
+                                    </div>
+                                </div>
+                            </div>
+                            <div nz-col [nzSpan]="isMobile ? 24 : 8" *ngSwitchCase="'time'">
+                                <div class="filter-item" nz-row>
+                                    <div class="item-label" nz-col [nzSpan]="0"></div>
+                                    <div nz-col [nzSpan]="24">
+                                        <nz-range-picker [nzRanges]="timeSet" [formControlName]="item.key"
+                                            [nzDisabledDate]="!item.timeDisabled ? disabledDate : null" nzSize=""
+                                            nzFormat="yyyy.MM.dd" nzInputReadOnly='true'></nz-range-picker>
+                                    </div>
+                                </div>
+                            </div>
+                            <div nz-col [nzSpan]="isMobile ? 24 : 6" *ngSwitchCase="'date'">
+                                <div class="filter-item" nz-row>
+                                    <div class="item-label" nz-col [nzSpan]="8"></div>
+                                    <div nz-col [nzSpan]="16">
+                                        <nz-date-picker [formControlName]="item.key" nzSize="small"
+                                            nzFormat="yyyy-MM-dd"></nz-date-picker>
+                                    </div>
+                                </div>
+                            </div>
+                            <div nz-col [nzSpan]="24" *ngSwitchCase="'checkbox'">
+                                <div class="filter-item" nz-row>
+                                    <div class="item-label" nz-col [nzSpan]="2"></div>
+                                    <div nz-col [nzSpan]="22">
+                                        <nz-checkbox-wrapper style="width: 100%;"
+                                            (nzOnChange)="checkValueSet($event, item.key)">
+                                            <div nz-row>
+                                                <ng-container *ngFor="let ci of item.optionList">
+                                                    <label nz-checkbox [nzValue]="ci.value" [ngModel]="false"
+                                                        [ngModelOptions]="{standalone: true}"></label>
+                                                </ng-container>
+                                            </div>
+                                        </nz-checkbox-wrapper>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </ng-container>
+                </div>
+            </div>
+            <div class="form-right" nz-col [nzSpan]="4">
+                <button nz-button class="margin-right-sm" nzType="link" *ngIf="isMobile"
+                    (click)="isSHowAllFilter($event)">展开/关闭</button>
+                <button class="margin-right-sm" nzSize="" nz-button nzType="primary" style="margin-bottom: 5px;">筛选</button>
+                <button nz-button nzType="default" nzSize="" (click)="resetAll($event)">重置</button>
+            </div>
+        </div>
+        <div class="form-row" nz-row>
+            <ng-container *ngFor="let item of showFilters; let i = index">
+                <ng-container [ngSwitch]="item.type">
+                    <div nz-col [nzSpan]="isMobile ? 24 : 7" *ngSwitchCase="'text'">
+                        <div class="filter-item" nz-row>
+                            <div class="item-label" nz-col [nzSpan]="0"></div>
+                            <div nz-col [nzSpan]="24">
+                                <!-- <input nz-input nzSize="" [formControlName]="item.key"
+                                    [placeholder]="item.placeholder || ('请输入' + item.label)" /> -->
+                                <nz-input-group [nzSuffix]="suffixIconSearch">
+                                    <input type="text"
+                                        nz-input
+                                        [formControlName]="item.key"
+                                        [placeholder]="item.placeholder || ('请输入' + item.label)"
+                                        nz-button/>
+                                </nz-input-group>
+                                <ng-template #suffixIconSearch>
+                                    <i class="pointer" nz-icon nzType="search" (click)="submitForm()"></i>
+                                </ng-template>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+            </ng-container>
+        </div>
+    </form>
+</div>
+<!-- <div class="filter-form" *ngIf="!reload"></div> -->

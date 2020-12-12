@@ -1,0 +1,31 @@
+{
+    "apps": [{
+        "name": "zgl-nest-crm",
+        "script": "dist/nest/main.js",
+        "node_args": "--harmony"
+    }],
+    "deploy": {
+        "test": {
+            "user": "root",
+            "host": "10.33.31.7",
+            "ref": "origin/test",
+            "repo": "git@gitlab.zugeliang01.com:shiyi/zgl-nest-crm.git",
+            "path": "/home/admin/node-service/zgl-nest-crm",
+            "post-deploy": "cd /home/admin/node-service/zgl-nest-crm/source && git pull && pwd && node -v && npm install --production && pm2 startOrRestart ecosystem.json",
+            "env": {
+                "NODE_ENV": "test"
+            }
+        },
+        "online": {
+            "user": "admin",
+            "host": "121.40.142.73",
+            "ref": "origin/master",
+            "repo": "git@gitlab.zugeliang01.com:shiyi/zgl-nest-crm.git",
+            "path": "/home/admin/zgl_web/node-service/zgl-nest-crm",
+            "post-deploy": "bash /home/admin/zgl_web/node-service/zgl-nest-crm/current/deploy.sh",
+            "env": {
+                "NODE_ENV": "production"
+            }
+        }
+    }
+}

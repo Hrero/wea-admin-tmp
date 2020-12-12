@@ -1,0 +1,158 @@
+.app-header{
+    height: 48px;
+    position: relative;
+    width: 100%;
+    z-index: 2;
+    box-shadow: 0px 1px 4px 0px rgba(0,21,41,0.12);
+}
+.app-page{
+    display: flex;
+    height: calc(100vh);
+    //min-width: 1100px;
+    overflow: hidden;
+    .app-menu{
+        width: 220px;
+        height: 100%;
+        position: relative;
+        z-index: 1;
+        background: #fff;
+        box-shadow: 0 0 5px rgba(22,22,22,0.4);
+        overflow-y: auto;
+        &::-webkit-scrollbar{
+            overflow: hidden;
+        }
+    }
+    .app-body{
+        height: 100%;
+        flex: 1;
+        overflow-y: auto;
+        -webkit-overflow-scrolling:touch;
+        &::-webkit-scrollbar{
+            overflow: hidden;
+        }
+    }
+}
+.pagesWrap{
+    background: #f7f9ff;
+}
+.page-content{
+    margin: 20px;
+    width: auto;
+    overflow: hidden;
+    background: #ffffff;
+    box-sizing: border-box;
+    min-height: calc(100vh - 50px);
+}
+.page-nav{
+    height: 50px;
+    display: flex;
+    justify-content: flex-start;
+    background: #ffffff;
+    align-items: center;
+    padding-left: 30px;
+}
+.page-info{
+    border: 1px solid #e6e6e6;
+    background: #fff;
+    box-sizing: border-box;
+    padding: 10px 20px;
+    width: auto;
+    overflow: hidden;
+    table{
+        width: 100%;
+    }
+    .page-info-title{
+        margin-top: 20px;
+    }
+    .page-info-item{
+        line-height: 32px;
+        span{
+            font-size: 12px;
+        }
+    }
+    .page-info-static{
+        margin: 10px 0;
+    }
+}
+.page-filter{
+    background: #fff;
+    box-sizing: border-box;
+    padding: 17px 20px 3px;
+    width: auto;
+    overflow: hidden;
+    .filter-item > div{
+        margin-top: 12px;
+        margin-bottom: 12px;
+    }
+    .full-size{
+        width: 100%;
+    }
+}
+.page-table-opr{
+    // margin-top: 10px;
+    text-align: right;
+}
+.page-part{
+    margin-top: 10px;
+    width: auto;
+    overflow: hidden;
+    background: #fff;
+}
+table{
+    th{
+        white-space: nowrap;
+    }
+    td{
+        font-size: 12px;
+        button{
+            margin: 5px;
+            font-size: 12px;
+        }
+    }
+}
+.page-statistic{
+    width: auto;
+    overflow: hidden;
+    background: #fff;
+    padding: 10px 20px;
+    border: 1px solid #e6e6e6;
+    .statistic-title{
+        font-weight: bold;
+    }
+    div{
+        label {
+            display: block;
+        }
+    }
+}
+.list-img{
+    height: 40px;
+    width: 50px;
+    display: block;
+    margin: 0 5px;
+    img{
+        width: 100%;
+        height: 100%;
+    }
+}
+
+@media screen and (min-width: 641px){
+    .app-header .ant-menu-submenu-title{
+        padding: 0 10px!important;
+    }
+}
+
+@media screen and (max-width: 640px){
+    .app-menu{
+        position: fixed;
+        left: 0;
+        top:0;
+        width: 0;
+        height: 0;
+        overflow: hidden;
+        display: none;
+    }
+    ::-webkit-scrollbar {
+        display: none;
+    }
+}
